@@ -1,0 +1,28 @@
+name: Build EXE
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: 取得程式碼
+        uses: actions/checkout@v2
+
+      - name: 安裝 Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: 安裝 PyInstaller
+        run: pip install pyinstaller pymupdf tk
+
+      - name: 打包 `.exe`
+        run: pyinstaller --onefile --noconsole --icon=icon.ico main.py
+
+      - name: 上傳 `.exe`
+        uses: actions/upload-artifact@v2
+        with:
+          name: PDFTools_EXE
+          path: dist/main.exe
